@@ -51,31 +51,31 @@ class CollageResource extends Resource
                                     ->label('stock'),
                             ]),
                     ]),
-                Forms\Components\Section::make('Couches')
+                Forms\Components\Repeater::make('layers')
+                    ->relationship()
+                    ->label('Couches')
                     ->schema([
-                        Forms\Components\Repeater::make('layers')
-                            ->relationship()
-                            ->label('Couches')
+                        Forms\Components\Grid::make(2)
                             ->schema([
-                                Forms\Components\Grid::make(2)
-                                    ->schema([
-                                        Forms\Components\TextInput::make('order')
-                                            ->numeric()
-                                            ->default(1)
-                                            ->required()
-                                            ->label('Ordre'),
-                                    ]),
-                                Forms\Components\Grid::make(1)
-                                    ->schema([
-                                        Forms\Components\Select::make('color_id')
-                                            ->required()
-                                            ->label('Couleur')
-                                            ->options(function () {
-                                                return Color::all()->pluck('name', 'id');
-                                            }),
-                                    ]),
+                                Forms\Components\TextInput::make('order')
+                                    ->numeric()
+                                    ->required()
+                                    ->label('Ordre')
+                                    ->live()
+                                    ->afterStateHydrated(fn ($set, $get) =>
+                                    $set('order', count($get('../../layers') ?? []))
+                                    ),
                             ]),
-                    ]),
+                        Forms\Components\Grid::make(1)
+                            ->schema([
+                                Forms\Components\Select::make('color_id')
+                                    ->required()
+                                    ->label('Couleur')
+                                    ->options(fn () => Color::all()->pluck('name', 'id')),
+                            ]),
+                    ])
+
+
             ]);
     }
 

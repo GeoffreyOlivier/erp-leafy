@@ -11,6 +11,11 @@ class CreateCollage extends CreateRecord
 {
     protected static string $resource = CollageResource::class;
 
+    public function getTitle(): string
+    {
+        return 'Création d\'un tableau';
+    }
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         // Stocker les layers temporairement

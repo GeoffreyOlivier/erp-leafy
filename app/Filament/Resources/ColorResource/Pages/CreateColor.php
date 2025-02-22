@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateColor extends CreateRecord
 {
     protected static string $resource = ColorResource::class;
+
+    public function getTitle(): string
+    {
+        return 'Création d\'une couleur';
+    }
 }

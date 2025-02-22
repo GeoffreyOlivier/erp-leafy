@@ -16,25 +16,16 @@ class ViewCollage extends ViewRecord
 {
     protected static string $resource = CollageResource::class;
 
+    public function getTitle(): string
+    {
+        return $this->record->name;
+    }
+
     public function infolist(Infolist $infolist): Infolist
     {
 
         return $infolist
             ->schema([
-                Section::make('Tableau')
-                    ->schema([
-                        TextEntry::make('name')
-                            ->label('Nom du tableau'),
-                        TextEntry::make('ref')
-                            ->label('Référence du tableau'),
-                        TextEntry::make('width')
-                            ->label('Largeur'),
-                        TextEntry::make('height')
-                            ->label('Hauteur'),
-                        TextEntry::make('stock')
-                            ->label('Stock'),
-                    ]),
-
                 Section::make('Couches')
                     ->schema([
                         RepeatableEntry::make('layers')
@@ -60,7 +51,20 @@ class ViewCollage extends ViewRecord
                                             ->label('Fournisseur'),
                                     ])
                             ])
-                    ])
+                    ]),
+                Section::make('Tableau')
+                    ->schema([
+                        TextEntry::make('name')
+                            ->label('Nom du tableau'),
+                        TextEntry::make('ref')
+                            ->label('Référence du tableau'),
+                        TextEntry::make('width')
+                            ->label('Largeur'),
+                        TextEntry::make('height')
+                            ->label('Hauteur'),
+                        TextEntry::make('stock')
+                            ->label('Stock'),
+                    ]),
             ]);
     }
 }
