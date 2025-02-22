@@ -54,6 +54,7 @@ class CollageResource extends Resource
                 Forms\Components\Repeater::make('layers')
                     ->relationship()
                     ->label('Couches')
+                    ->addActionLabel('Ajouter une couche')
                     ->schema([
                         Forms\Components\Grid::make(2)
                             ->schema([
