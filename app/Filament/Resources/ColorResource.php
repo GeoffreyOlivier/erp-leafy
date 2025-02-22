@@ -22,7 +22,8 @@ class ColorResource extends Resource
     protected static ?string $model = Color::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-swatch';
-    protected static ?string $navigationLabel = 'Couleurs';
+    protected static ?string $pluralModelLabel = 'Couleurs';
+
 
     public static function form(Form $form): Form
     {
