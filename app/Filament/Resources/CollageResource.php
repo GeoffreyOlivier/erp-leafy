@@ -72,12 +72,21 @@ class CollageResource extends Resource
                                 Forms\Components\Select::make('color_id')
                                     ->required()
                                     ->label('Couleur')
-                                    ->options(fn () => Color::all()->pluck('code', 'id')),
+                                    ->placeholder('Sélectionne une couleur')
+                                    ->options(fn () => Color::all()->pluck('code', 'id')) // Affiche le nom
+                                    ->live()
+                                    ->afterStateUpdated(function ($set, $state) {
+                                        $color = Color::find($state)?->color;
+                                        $set('color_preview', $color ?: null); // Assure que la valeur est bien initialisée
+                                    })
                             ]),
+                        Forms\Components\Placeholder::make('Couleur sélectionné')
+                            ->hidden(fn ($get) => empty($get('color_preview')))
+                            ->content(fn ($get) => view('filament.components.color-preview', ['color' => $get('color_preview')])),
                     ])
 
+        ]);
 
-            ]);
     }
 
     public static function table(Table $table): Table
