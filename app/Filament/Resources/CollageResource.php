@@ -72,7 +72,7 @@ class CollageResource extends Resource
                                 Forms\Components\Select::make('color_id')
                                     ->required()
                                     ->label('Couleur')
-                                    ->options(fn () => Color::all()->pluck('name', 'id')),
+                                    ->options(fn () => Color::all()->pluck('code', 'id')),
                             ]),
                     ])
 
