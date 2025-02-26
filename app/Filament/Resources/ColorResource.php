@@ -7,6 +7,7 @@ use App\Filament\Resources\ColorResource\RelationManagers;
 use App\Models\Color;
 use App\Models\Layer;
 use Filament\Forms;
+use Filament\Forms\Components\ViewField;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
@@ -24,6 +25,7 @@ class ColorResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-swatch';
     protected static ?string $pluralModelLabel = 'Couleurs';
 
+    public $color = '#ff0000';
 
     public static function form(Form $form): Form
     {
@@ -31,15 +33,38 @@ class ColorResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('code')
                     ->required()
-                    ->label('Code'),
+                    ->label('Codesss'),
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->label('name'),
-                Forms\Components\ColorPicker::make('color')
+                    ->label('Nom'),
+                Forms\Components\Select::make('supplier')
+                    ->label('Marque')
+                    ->placeholder('Sélectionne une marque')
+                    ->options([
+                        'Canson' => 'Canson',
+                        'Clairefontaine' => 'Clairefontaine',
+                        'Florence' => 'Florence',
+                        'Créalia' => 'Créalia',
+                        'Amazon' => 'Amazon',
+                        'Autre' => 'Autre',
+                    ])
+                    ->preload(),
+                Forms\Components\Select::make('shop')
+                    ->label('Magasin')
+                    ->placeholder('Sélectionne un magasin')
+                    ->options([
+                        'Rougier & plé' => 'Rougier & plé',
+                        'Vaessen créative' => 'Vaessen créative',
+                        'Amazon' => 'Amazon',
+                        'Site en ligne' => 'Site en ligne',
+                        'Autre' => 'Autre',
+                    ])
+                    ->preload(),
+                ViewField::make('color')
                     ->required()
-                    ->label('Couleur'),
-                Forms\Components\TextInput::make('supplier')
-                    ->label('Fournisseur'),
+                    ->label('Choisir une couleur')
+                    ->view('filament.forms.components.color-picker')
+                    ->reactive(),
             ]);
     }
 
@@ -87,4 +112,14 @@ class ColorResource extends Resource
             'edit' => Pages\EditColor::route('/{record}/edit'),
         ];
     }
+
+    public function updateColor($color)
+    {
+        $this->color_preview = $color;
+        $this->color = $color;
+    }
+
+
+
+
 }

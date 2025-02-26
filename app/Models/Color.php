@@ -12,7 +12,7 @@ class Color extends Model
 
     protected $table = 'color';
 
-    protected $fillable = ['code', 'name', 'color', 'supplier'];
+    protected $fillable = ['code', 'name', 'color', 'supplier','shop'];
 
     /**
      * Relation avec les couches (Layer).

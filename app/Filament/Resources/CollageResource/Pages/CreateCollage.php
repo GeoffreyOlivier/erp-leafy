@@ -11,10 +11,30 @@ class CreateCollage extends CreateRecord
 {
     protected static string $resource = CollageResource::class;
 
+    public $color_preview; // Stocke la couleur sélectionnée
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $this->color_preview = $data['color_preview'] ?? null;
+        return $data;
+    }
+
+    protected function getListeners(): array
+    {
+        return [
+            'updateColor' => 'setColorPreview',
+        ];
+    }
+
+    public function setColorPreview($color)
+    {
+        $this->color_preview = $color;
+    }
     public function getTitle(): string
     {
         return 'Création d\'un tableau';
     }
+
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {

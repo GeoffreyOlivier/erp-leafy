@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CollageResource extends Resource
@@ -22,7 +23,6 @@ class CollageResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $pluralModelLabel = 'Tableaux';
-
 
     public static function form(Form $form): Form
     {
@@ -63,30 +63,35 @@ class CollageResource extends Resource
                                     ->required()
                                     ->label('Ordre')
                                     ->live()
-                                    ->afterStateHydrated(fn ($set, $get) =>
-                                    $set('order', count($get('../../layers') ?? []))
+                                    ->afterStateHydrated(fn($set, $get) => $set('order', count($get('../../layers') ?? []))
                                     ),
                             ]),
-                        Forms\Components\Grid::make(1)
-                            ->schema([
-                                Forms\Components\Select::make('color_id')
-                                    ->required()
-                                    ->label('Couleur')
-                                    ->placeholder('Sélectionne une couleur')
-                                    ->options(fn () => Color::all()->pluck('code', 'id')) // Affiche le nom
-                                    ->live()
-                                    ->afterStateUpdated(function ($set, $state) {
-                                        $color = Color::find($state)?->color;
-                                        $set('color_preview', $color ?: null); // Assure que la valeur est bien initialisée
-                                    })
-                            ]),
-                        Forms\Components\Placeholder::make('Couleur sélectionné')
-                            ->hidden(fn ($get) => empty($get('color_preview')))
-                            ->content(fn ($get) => view('filament.components.color-preview', ['color' => $get('color_preview')])),
-                    ])
+                        Forms\Components\Select::make('color_id')
+                            ->label('Couleur')
+                            ->placeholder('Sélectionne une couleur')
+                            ->searchable() // Active le champ de recherche intégré
+                            ->options(fn() => Color::all()->pluck('code', 'id'))
+                            ->live() // Met à jour dynamiquement d'autres champs si besoin
+                            ->afterStateUpdated(function ($set, $state) {
+                                $color = Color::find($state)?->code;
+                                $set('color_preview', $color ?: null);
+                            }),
 
-        ]);
-
+                        Forms\Components\Placeholder::make('Couleur sélectionnée')
+                            ->hidden(fn($get) => empty($get('color_preview')))
+                            ->content(function ($get) {
+                                if ($colorId = $get('color_id')) {
+                                    $color = \App\Models\Color::find($colorId);
+                                    if ($color) {
+                                        return view('filament.components.color-preview', [
+                                            'color' => $color->color,
+                                        ]);
+                                    }
+                                }
+                                return null;
+                            }),
+                    ]),
+            ]);
     }
 
     public static function table(Table $table): Table
