@@ -33,7 +33,7 @@ class ColorResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('code')
                     ->required()
-                    ->label('Codesss'),
+                    ->label('Codes'),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->label('Nom'),
