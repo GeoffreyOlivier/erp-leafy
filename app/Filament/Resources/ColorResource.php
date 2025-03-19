@@ -57,6 +57,7 @@ class ColorResource extends Resource
                         'Vaessen créative' => 'Vaessen créative',
                         'Amazon' => 'Amazon',
                         'Site en ligne' => 'Site en ligne',
+                        'Cultura' => 'Cultura',
                         'Autre' => 'Autre',
                     ])
                     ->preload(),
